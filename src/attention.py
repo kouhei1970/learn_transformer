@@ -150,6 +150,128 @@ class SelfAttention(nn.Module):
         return output, attention_weights
 
 
+class MultiHeadAttention(nn.Module):
+    """
+    Multi-Head Attention
+    
+    複数のAttention headを並列に実行することで、
+    異なる表現部分空間から情報を捉える仕組みです。
+    
+    各headは独立したQ, K, V変換を持ち、異なる種類の関係性を学習します。
+    全headの出力を結合し、最終的な線形変換を適用します。
+    
+    数式:
+        MultiHead(Q, K, V) = Concat(head_1, ..., head_h)W^O
+        head_i = Attention(QW_i^Q, KW_i^K, VW_i^V)
+    
+    パラメータ数は Single-Head と同じ:
+        4 × (d_model × d_model)
+    """
+    
+    def __init__(self, d_model, num_heads, dropout=0.1):
+        """
+        Args:
+            d_model (int): モデルの次元数（入力・出力の次元）
+            num_heads (int): Attention headの数
+            dropout (float): ドロップアウト率
+        """
+        super(MultiHeadAttention, self).__init__()
+        
+        # d_modelがnum_headsで割り切れることを確認
+        assert d_model % num_heads == 0, \
+            f"d_model ({d_model}) must be divisible by num_heads ({num_heads})"
+        
+        self.d_model = d_model
+        self.num_heads = num_heads
+        self.d_k = d_model // num_heads  # 各headの次元
+        
+        # Q, K, V用の線形変換層（全headをまとめて処理）
+        # bias=False: 最新のベストプラクティスに従う
+        self.W_q = nn.Linear(d_model, d_model, bias=False)
+        self.W_k = nn.Linear(d_model, d_model, bias=False)
+        self.W_v = nn.Linear(d_model, d_model, bias=False)
+        
+        # Scaled Dot-Product Attention
+        self.attention = ScaledDotProductAttention(dropout)
+        
+        # 出力用の線形変換層
+        self.W_o = nn.Linear(d_model, d_model, bias=False)
+        
+    def split_heads(self, x, batch_size):
+        """
+        入力を複数のheadに分割
+        
+        Args:
+            x: shape [batch_size, seq_len, d_model]
+        Returns:
+            shape [batch_size, num_heads, seq_len, d_k]
+        """
+        # [batch, seq_len, d_model] -> [batch, seq_len, num_heads, d_k]
+        x = x.view(batch_size, -1, self.num_heads, self.d_k)
+        # [batch, seq_len, num_heads, d_k] -> [batch, num_heads, seq_len, d_k]
+        return x.transpose(1, 2)
+    
+    def combine_heads(self, x, batch_size):
+        """
+        複数のheadを結合
+        
+        Args:
+            x: shape [batch_size, num_heads, seq_len, d_k]
+        Returns:
+            shape [batch_size, seq_len, d_model]
+        """
+        # [batch, num_heads, seq_len, d_k] -> [batch, seq_len, num_heads, d_k]
+        x = x.transpose(1, 2).contiguous()
+        # [batch, seq_len, num_heads, d_k] -> [batch, seq_len, d_model]
+        return x.view(batch_size, -1, self.d_model)
+    
+    def forward(self, query, key, value, mask=None):
+        """
+        Multi-Head Attentionの順伝播
+        
+        Args:
+            query (torch.Tensor): Query [batch_size, seq_len, d_model]
+            key (torch.Tensor): Key [batch_size, seq_len, d_model]
+            value (torch.Tensor): Value [batch_size, seq_len, d_model]
+            mask (torch.Tensor, optional): Attentionマスク
+        
+        Returns:
+            output (torch.Tensor): 出力 [batch_size, seq_len, d_model]
+            attention_weights (torch.Tensor): Attention重み 
+                                             [batch_size, num_heads, seq_len, seq_len]
+        """
+        batch_size = query.size(0)
+        
+        # 1. 線形変換: [batch, seq_len, d_model]
+        Q = self.W_q(query)
+        K = self.W_k(key)
+        V = self.W_v(value)
+        
+        # 2. 複数headに分割: [batch, num_heads, seq_len, d_k]
+        Q = self.split_heads(Q, batch_size)
+        K = self.split_heads(K, batch_size)
+        V = self.split_heads(V, batch_size)
+        
+        # 3. マスクの次元を調整（必要な場合）
+        if mask is not None:
+            # マスクにhead次元を追加: [batch, 1, seq_len, seq_len]
+            mask = mask.unsqueeze(1)
+        
+        # 4. 各headでScaled Dot-Product Attentionを実行
+        # Q, K, V: [batch, num_heads, seq_len, d_k]
+        # attention_output: [batch, num_heads, seq_len, d_k]
+        # attention_weights: [batch, num_heads, seq_len, seq_len]
+        attention_output, attention_weights = self.attention(Q, K, V, mask)
+        
+        # 5. 全headを結合: [batch, seq_len, d_model]
+        attention_output = self.combine_heads(attention_output, batch_size)
+        
+        # 6. 出力線形変換
+        output = self.W_o(attention_output)
+        
+        return output, attention_weights
+
+
 # テスト用のシンプルな例
 if __name__ == "__main__":
     # デバイスの設定（macOS GPU対応）
@@ -168,6 +290,10 @@ if __name__ == "__main__":
     seq_len = 5       # シーケンス長
     d_model = 64      # モデルの次元数
     
+    print("=" * 70)
+    print("Self-Attention Test")
+    print("=" * 70)
+    
     # ランダムな入力を生成
     x = torch.randn(batch_size, seq_len, d_model).to(device)
     print(f"Input shape: {x.shape}")
@@ -180,7 +306,38 @@ if __name__ == "__main__":
     
     print(f"Output shape: {output.shape}")
     print(f"Attention weights shape: {attention_weights.shape}")
-    print(f"\nAttention weights (first sample):")
-    print(attention_weights[0].detach().cpu().numpy())
+    print(f"\nAttention weights (first sample, first 3x3):")
+    print(attention_weights[0, :3, :3].detach().cpu().numpy())
     print(f"\nAttention weights sum per row (should be ~1.0):")
     print(attention_weights[0].sum(dim=-1).detach().cpu().numpy())
+    
+    print("\n" + "=" * 70)
+    print("Multi-Head Attention Test")
+    print("=" * 70)
+    
+    num_heads = 8
+    
+    # Multi-Head Attentionモデルを作成
+    multi_head_attention = MultiHeadAttention(d_model, num_heads).to(device)
+    
+    # 順伝播
+    output_mh, attention_weights_mh = multi_head_attention(x, x, x)
+    
+    print(f"Input shape: {x.shape}")
+    print(f"Output shape: {output_mh.shape}")
+    print(f"Attention weights shape: {attention_weights_mh.shape}")
+    print(f"Number of heads: {num_heads}")
+    print(f"d_k per head: {multi_head_attention.d_k}")
+    
+    print("\n" + "=" * 70)
+    print("Parameter Comparison")
+    print("=" * 70)
+    
+    self_attn_params = sum(p.numel() for p in self_attention.parameters())
+    multi_head_params = sum(p.numel() for p in multi_head_attention.parameters())
+    
+    print(f"Self-Attention parameters: {self_attn_params:,}")
+    print(f"Multi-Head Attention parameters: {multi_head_params:,}")
+    print(f"\n💡 Same number of parameters, but Multi-Head learns")
+    print(f"   {num_heads} different representation subspaces!")
+

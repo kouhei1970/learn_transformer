@@ -17,9 +17,11 @@ Transformerを理解するために自作するプロジェクトです。
 ```
 learn_transformer/
 ├── src/                    # ソースコード
-│   └── attention.py        # Self-Attention実装
+│   └── attention.py        # Self-Attention & Multi-Head Attention実装
 ├── notebooks/              # Jupyter Notebook
-│   └── 01_self_attention_demo.ipynb  # Self-Attentionのデモ
+│   ├── 01_self_attention_demo.ipynb   # Self-Attentionのデモ
+│   ├── 02_multi_head_attention_demo.ipynb  # Multi-Head Attentionのデモ
+│   └── QandA.ipynb         # 学習中の質問と回答
 ├── tests/                  # テストコード
 ├── requirements.txt        # 依存パッケージ
 └── README.md
@@ -36,7 +38,7 @@ pip install -r requirements.txt
 
 実装予定の要素:
 - [x] Self-Attention機構 (`src/attention.py`)
-- [ ] Multi-Head Attention
+- [x] Multi-Head Attention (`src/attention.py`)
 - [ ] Position Encoding
 - [ ] Feed Forward Network
 - [ ] Encoder
