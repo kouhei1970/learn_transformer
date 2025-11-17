@@ -109,9 +109,11 @@ class SelfAttention(nn.Module):
         
         # 入力からQuery, Key, Valueを生成するための線形変換
         # 各変換は独立したパラメータを持つ
-        self.query_linear = nn.Linear(d_model, d_model)
-        self.key_linear = nn.Linear(d_model, d_model)
-        self.value_linear = nn.Linear(d_model, d_model)
+        # bias=False: 最新のベストプラクティスに従い、バイアスなしで実装
+        # (Attentionは相対的な関係性を捉えるため、絶対的なオフセットは不要)
+        self.query_linear = nn.Linear(d_model, d_model, bias=False)
+        self.key_linear = nn.Linear(d_model, d_model, bias=False)
+        self.value_linear = nn.Linear(d_model, d_model, bias=False)
         
         # Scaled Dot-Product Attention
         self.attention = ScaledDotProductAttention(dropout)
