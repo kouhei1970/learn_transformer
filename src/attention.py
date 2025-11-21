@@ -155,7 +155,7 @@ class MultiHeadAttention(nn.Module):
     Multi-Head Attention
     
     複数のAttention headを並列に実行することで、
-    異なる表現部分空間から情報を捉える仕組みです。
+    異なる表現部分空間から情報を捉える仕組みです。++
     
     各headは独立したQ, K, V変換を持ち、異なる種類の関係性を学習します。
     全headの出力を結合し、最終的な線形変換を適用します。
@@ -272,6 +272,68 @@ class MultiHeadAttention(nn.Module):
         return output, attention_weights
 
 
+class PositionalEncoding(nn.Module):
+    """
+    位置エンコーディング (Positional Encoding)
+    
+    Transformerは順序を考慮しないため、系列の位置情報を明示的に与える必要があります。
+    Sin/Cos関数を使った固定的なエンコーディングで、各位置に固有のベクトルを生成します。
+    
+    数式:
+        PE(pos, 2i)   = sin(pos / 10000^(2i/d_model))
+        PE(pos, 2i+1) = cos(pos / 10000^(2i/d_model))
+    
+    Args:
+        d_model (int): モデルの次元数
+        max_len (int): サポートする最大系列長
+        dropout (float): ドロップアウト率
+    """
+    
+    def __init__(self, d_model, max_len=5000, dropout=0.1):
+        super(PositionalEncoding, self).__init__()
+        self.dropout = nn.Dropout(p=dropout)
+        
+        # 位置エンコーディング行列を作成
+        # shape: [max_len, d_model]
+        pe = torch.zeros(max_len, d_model)
+        
+        # 位置インデックス: [0, 1, 2, ..., max_len-1]
+        # shape: [max_len, 1]
+        position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
+        
+        # 分母の計算: 10000^(2i/d_model)
+        # exp(log(10000) * (-2i/d_model)) = 10000^(-2i/d_model)
+        # shape: [d_model/2]
+        div_term = torch.exp(
+            torch.arange(0, d_model, 2).float() * (-math.log(10000.0) / d_model)
+        )
+        
+        # 偶数次元にはsin、奇数次元にはcos
+        pe[:, 0::2] = torch.sin(position * div_term)
+        pe[:, 1::2] = torch.cos(position * div_term)
+        
+        # バッチ次元を追加: [1, max_len, d_model]
+        pe = pe.unsqueeze(0)
+        
+        # パラメータではなくバッファとして登録（学習しない定数）
+        # モデルの状態として保存されるが、勾配計算の対象外
+        self.register_buffer('pe', pe)
+    
+    def forward(self, x):
+        """
+        入力に位置エンコーディングを加算
+        
+        Args:
+            x (torch.Tensor): 入力 [batch_size, seq_len, d_model]
+        
+        Returns:
+            torch.Tensor: 位置情報が加算された入力 [batch_size, seq_len, d_model]
+        """
+        # 入力の系列長分だけ位置エンコーディングを取得して加算
+        x = x + self.pe[:, :x.size(1), :]
+        return self.dropout(x)
+
+
 # テスト用のシンプルな例
 if __name__ == "__main__":
     # デバイスの設定（macOS GPU対応）
@@ -340,4 +402,28 @@ if __name__ == "__main__":
     print(f"Multi-Head Attention parameters: {multi_head_params:,}")
     print(f"\n💡 Same number of parameters, but Multi-Head learns")
     print(f"   {num_heads} different representation subspaces!")
-
+    
+    print("\n" + "=" * 70)
+    print("Positional Encoding Test")
+    print("=" * 70)
+    
+    # Position Encodingのテスト
+    pos_encoding = PositionalEncoding(d_model, max_len=100, dropout=0.0)
+    
+    # 同じ埋め込みベクトルを全位置で使用
+    same_embedding = torch.randn(1, d_model).to(device)
+    repeated_embeddings = same_embedding.repeat(1, seq_len, 1)
+    
+    print(f"Input (same embedding repeated): {repeated_embeddings.shape}")
+    print(f"Position 0 and Position 4 difference (before PE): "
+          f"{(repeated_embeddings[0, 0] - repeated_embeddings[0, 4]).abs().sum().item():.6f}")
+    
+    # Position Encodingを適用
+    with_pos = pos_encoding(repeated_embeddings.cpu()).to(device)
+    
+    print(f"\nAfter Positional Encoding: {with_pos.shape}")
+    print(f"Position 0 and Position 4 difference (after PE): "
+          f"{(with_pos[0, 0] - with_pos[0, 4]).abs().sum().item():.6f}")
+    
+    print(f"\n💡 Position Encoding により、同じ埋め込みでも")
+    print(f"   位置が異なれば異なる表現になります！")
