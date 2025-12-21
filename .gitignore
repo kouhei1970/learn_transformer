@@ -30,3 +30,9 @@ Thumbs.db
 dist/
 build/
 *.egg-info/
+
+# Generated images
+*.png
+*.jpg
+*.jpeg
+*.gif
