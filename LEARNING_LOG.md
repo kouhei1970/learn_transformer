@@ -1,5 +1,65 @@
 # Transformer学習ログ
 
+## 2025年12月21日
+
+### 完了した内容
+
+#### 実装
+- ✅ Feed Forward Network（FFN）の実装 (`src/feed_forward.py`)
+  - 標準FFN（ReLU/GELU）
+  - Gated FFN（SwiGLU、LLaMA/PaLM方式）
+- ✅ 04_feed_forward_demo.ipynb 完了
+
+#### 学習ポイント
+- FFNの役割（Attentionは線形、FFNで非線形性を導入）
+- Position-wise（各トークンに独立に適用）
+- 中間層の拡大（d_model → 4×d_model → d_model）
+- 活性化関数の比較（ReLU vs GELU vs SwiGLU）
+- パラメータ配分（FFNがTransformer層の約2/3を占める）
+
+#### 学習記録（QandA.ipynb）
+- **Q19**: FFNの数式は「フィードフォワード」を示しているのか？
+  - 中身は2層MLP（線形→活性化→線形）
+  - 「フィードフォワード」は情報の流れ方（一方向、再帰なし）を表す用語
+  - Attentionと区別するための名前（トークン間の相互作用なし）
+- **Q20**: 「1層あたりのパラメータ配分」の「1層」とは？
+  - Attention + FFN のセット（= 1つのEncoder/Decoderブロック）
+  - Transformerは複数の層を積み重ねた構造（元論文では6層）
+
+### 次のステップ
+- [ ] Layer Normalization
+- [ ] Residual Connection
+- [ ] Encoderブロック全体の構築
+
+---
+
+## 2025年12月20日
+
+### 完了した内容
+
+#### 実装
+- ✅ Position Encoding（位置エンコーディング）の実装 (`src/position_encoding.py`)
+  - Sinusoidal Positional Encoding（論文オリジナル）
+  - Learned Positional Encoding（BERT/GPT方式）
+- ✅ 03_position_encoding_demo.ipynb 完了
+
+#### 学習記録（QandA.ipynb）
+- **Q17**: Position Encodingは何次元を使うのか？
+  - d_model次元すべてを使用
+  - 複数周波数の組み合わせで位置を一意に特定（二進数と類似）
+  - トークン埋め込みに加算して位置情報を重畳
+- **Q18**: Position Encodingは全要素に加法的に加わるのか？
+  - はい、element-wiseに加算
+  - 連結(concat)ではなく加算を使う理由（効率性、十分な性能）
+
+#### その他の理解ポイント
+- なぜ位置情報が必要か（Transformerは並列処理のため位置情報が失われる）
+- Sin/Cosを使う理由（相対位置が線形変換・回転で表現可能）
+- 周波数の意味（低次元=高周波、高次元=低周波）
+- Sinusoidal vs Learned の比較
+
+---
+
 ## 2025年11月19日
 
 ### 完了した内容
