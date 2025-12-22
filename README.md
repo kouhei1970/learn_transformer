@@ -30,8 +30,8 @@ learn_transformer/
 │   ├── 05_encoder_demo.ipynb             # Encoderのデモ
 │   ├── 06_decoder_demo.ipynb             # Decoderのデモ
 │   ├── QandA_01_attention.ipynb          # Q&A: Attention基礎 (Q1-Q4)
-│   ├── QandA_02_multihead.ipynb          # Q&A: Multi-Head Attention (Q5-Q14)
-│   ├── QandA_03_architecture.ipynb       # Q&A: アーキテクチャ (Q15-Q28)
+│   ├── QandA_02_multihead.ipynb          # Q&A: Multi-Head Attention (Q5-Q16)
+│   ├── QandA_03_architecture.ipynb       # Q&A: アーキテクチャ (Q17-Q31)
 │   └── QandA_04_experiments.ipynb        # Q&A: 実験・応用
 ├── tests/                  # テストコード
 ├── requirements.txt        # 依存パッケージ

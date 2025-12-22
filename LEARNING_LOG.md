@@ -1,5 +1,25 @@
 # Transformer学習ログ
 
+## 全体の進捗
+
+| コンポーネント | 状態 | ファイル |
+|---------------|------|----------|
+| Self-Attention | ✅ 完了 | `src/attention.py` |
+| Multi-Head Attention | ✅ 完了 | `src/attention.py` |
+| Position Encoding | ✅ 完了 | `src/position_encoding.py` |
+| Feed Forward Network | ✅ 完了 | `src/feed_forward.py` |
+| Encoder | ✅ 完了 | `src/encoder.py` |
+| Decoder | ✅ 完了 | `src/decoder.py` |
+| 完全なTransformer | 🔲 未着手 | - |
+
+### Q&A記録
+- `QandA_01_attention.ipynb`: Q1-Q4（Attention基礎）
+- `QandA_02_multihead.ipynb`: Q5-Q16（Multi-Head Attention）
+- `QandA_03_architecture.ipynb`: Q17-Q31（アーキテクチャ）
+- `QandA_04_experiments.ipynb`: 実験・応用
+
+---
+
 ## 2025年12月22日（続き）
 
 ### 完了した内容
@@ -62,10 +82,9 @@
 - **Encoder→Decoder**: Cross-AttentionでK, Vとして使用、勾配も逆伝播
 - **出力変換**: 多対一の写像（異なるベクトル→同じ単語）
 
-### 次のステップ
-- [ ] Decoder
-- [ ] Cross-Attention
-- [ ] 完全なTransformerモデル
+### 完了（このセクションで）
+- ✅ Decoder
+- ✅ Cross-Attention
 
 ---
 
@@ -192,27 +211,11 @@
    - バッチ処理のため、行ベクトル形式を採用
    - 通常の列ベクトル形式とは転置の関係
 
-### 次回の学習予定
-
-#### 次のステップ: Position Encoding
-- [ ] Position Encodingの理論と実装
-- [ ] なぜ位置情報が必要か
-- [ ] Sin/Cos関数を使った位置エンコーディング
-- [ ] 03_position_encoding_demo.ipynb の作成
-
-#### その後の予定
-- [ ] Feed Forward Network
-- [ ] Encoderブロックの構築
-- [ ] Decoderブロックの構築
-- [ ] 完全なTransformerモデル
-- [ ] テキスト生成の実装
+### その後の進捗（完了済み）
+- ✅ Position Encoding（2025年12月20日）
+- ✅ Feed Forward Network（2025年12月21日）
+- ✅ Encoder（2025年12月21日）
+- ✅ Decoder（2025年12月22日）
 
 ### 参考資料
 - 論文: "Attention is All You Need" (https://arxiv.org/abs/1706.03762)
-- src/attention.py: 実装済みのコード
-- QandA.ipynb: 全ての質問と回答
-
-### メモ
-- 理解は順調に進んでいる
-- 各質問への回答で理論と実装の両方を確認済み
-- 次は位置情報をどう扱うかが重要なテーマ
