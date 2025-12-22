@@ -1,5 +1,35 @@
 # Transformer学習ログ
 
+## 2025年12月21日（続き）
+
+### 完了した内容
+
+#### 実装
+- ✅ Encoder（エンコーダー）の実装 (`src/encoder.py`)
+  - LayerNorm: 層正規化（学習の安定化）
+  - ResidualConnection: 残差接続（勾配の流れを改善）
+  - EncoderLayer: 1層分のEncoder（Attention + FFN）
+  - Encoder: N層のEncoderLayer
+  - TransformerEncoder: 埋め込み層を含む完全版
+- ✅ 05_encoder_demo.ipynb 完了
+- ✅ Jupyterモジュールキャッシュ問題を修正（sys.modulesからの削除方式）
+
+#### 学習ポイント
+- **Layer Normalization**: 特徴次元に沿って正規化、バッチサイズに依存しない
+- **Residual Connection**: 入力をそのまま出力に加算、勾配のショートカット
+- **Encoder構造**: [Self-Attention → Add & Norm → FFN → Add & Norm] × N層
+- **パラメータ数**: 語彙サイズが大きいとEmbedding層が支配的
+
+#### トラブルシューティング
+- **Jupyterキャッシュ問題**: `importlib.reload`ではなく`sys.modules`から`src`モジュールを削除する方式で解決
+
+### 次のステップ
+- [ ] Decoder
+- [ ] Cross-Attention
+- [ ] 完全なTransformerモデル
+
+---
+
 ## 2025年12月21日
 
 ### 完了した内容
@@ -25,11 +55,6 @@
 - **Q20**: 「1層あたりのパラメータ配分」の「1層」とは？
   - Attention + FFN のセット（= 1つのEncoder/Decoderブロック）
   - Transformerは複数の層を積み重ねた構造（元論文では6層）
-
-### 次のステップ
-- [ ] Layer Normalization
-- [ ] Residual Connection
-- [ ] Encoderブロック全体の構築
 
 ---
 

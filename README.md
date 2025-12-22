@@ -19,13 +19,18 @@ learn_transformer/
 ├── src/                    # ソースコード
 │   ├── attention.py        # Self-Attention & Multi-Head Attention実装
 │   ├── position_encoding.py # Position Encoding実装
-│   └── feed_forward.py     # Feed Forward Network実装
+│   ├── feed_forward.py     # Feed Forward Network実装
+│   └── encoder.py          # Encoder実装
 ├── notebooks/              # Jupyter Notebook
-│   ├── 01_self_attention_demo.ipynb   # Self-Attentionのデモ
-│   ├── 02_multi_head_attention_demo.ipynb  # Multi-Head Attentionのデモ
-│   ├── 03_position_encoding_demo.ipynb    # Position Encodingのデモ
-│   ├── 04_feed_forward_demo.ipynb         # Feed Forward Networkのデモ
-│   └── QandA.ipynb         # 学習中の質問と回答
+│   ├── 01_self_attention_demo.ipynb      # Self-Attentionのデモ
+│   ├── 02_multi_head_attention_demo.ipynb # Multi-Head Attentionのデモ
+│   ├── 03_position_encoding_demo.ipynb   # Position Encodingのデモ
+│   ├── 04_feed_forward_demo.ipynb        # Feed Forward Networkのデモ
+│   ├── 05_encoder_demo.ipynb             # Encoderのデモ
+│   ├── QandA_01_attention.ipynb          # Q&A: Attention基礎 (Q1-Q4)
+│   ├── QandA_02_multihead.ipynb          # Q&A: Multi-Head Attention (Q5-Q14)
+│   ├── QandA_03_architecture.ipynb       # Q&A: Position Encoding & FFN (Q15-Q18)
+│   └── QandA_04_experiments.ipynb        # Q&A: 実験・応用 (Q19-Q24)
 ├── tests/                  # テストコード
 ├── requirements.txt        # 依存パッケージ
 └── README.md
@@ -45,7 +50,10 @@ pip install -r requirements.txt
 - [x] Multi-Head Attention (`src/attention.py`)
 - [x] Position Encoding (`src/position_encoding.py`)
 - [x] Feed Forward Network (`src/feed_forward.py`)
-- [ ] Encoder
+- [x] Encoder (`src/encoder.py`)
+  - Layer Normalization
+  - Residual Connection
+  - EncoderLayer / Encoder / TransformerEncoder
 - [ ] Decoder
 - [ ] 完全なTransformerモデル
 

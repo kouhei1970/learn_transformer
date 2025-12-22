@@ -40,7 +40,7 @@ class FeedForward(nn.Module):
             dropout (float): ドロップアウト率
             activation (str): 活性化関数 ('relu' or 'gelu')
         """
-        super(FeedForward, self).__init__()
+        super().__init__()
 
         # 中間層の次元（デフォルトは4倍）
         if d_ff is None:
@@ -105,7 +105,7 @@ class GatedFeedForward(nn.Module):
             d_ff (int): 中間層の次元数（デフォルトは d_model * 4）
             dropout (float): ドロップアウト率
         """
-        super(GatedFeedForward, self).__init__()
+        super().__init__()
 
         if d_ff is None:
             d_ff = d_model * 4

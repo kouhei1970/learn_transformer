@@ -33,7 +33,7 @@ class ScaledDotProductAttention(nn.Module):
         Args:
             dropout (float): Attention重みに適用するドロップアウト率
         """
-        super(ScaledDotProductAttention, self).__init__()
+        super().__init__()
         self.dropout = nn.Dropout(dropout)
     
     def forward(self, query, key, value, mask=None):
@@ -103,7 +103,7 @@ class SelfAttention(nn.Module):
             d_model (int): モデルの次元数（入力・出力の次元）
             dropout (float): ドロップアウト率
         """
-        super(SelfAttention, self).__init__()
+        super().__init__()
         
         self.d_model = d_model
         
@@ -175,7 +175,7 @@ class MultiHeadAttention(nn.Module):
             num_heads (int): Attention headの数
             dropout (float): ドロップアウト率
         """
-        super(MultiHeadAttention, self).__init__()
+        super().__init__()
         
         # d_modelがnum_headsで割り切れることを確認
         assert d_model % num_heads == 0, \
@@ -290,7 +290,7 @@ class PositionalEncoding(nn.Module):
     """
     
     def __init__(self, d_model, max_len=5000, dropout=0.1):
-        super(PositionalEncoding, self).__init__()
+        super().__init__()
         self.dropout = nn.Dropout(p=dropout)
         
         # 位置エンコーディング行列を作成

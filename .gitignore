@@ -36,3 +36,6 @@ build/
 *.jpg
 *.jpeg
 *.gif
+
+# Archive files
+*_archive_*.ipynb

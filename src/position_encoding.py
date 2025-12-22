@@ -39,7 +39,7 @@ class PositionalEncoding(nn.Module):
             max_len (int): 対応可能な最大シーケンス長
             dropout (float): ドロップアウト率
         """
-        super(PositionalEncoding, self).__init__()
+        super().__init__()
 
         self.dropout = nn.Dropout(p=dropout)
         self.d_model = d_model
@@ -122,7 +122,7 @@ class LearnedPositionalEncoding(nn.Module):
             max_len (int): 対応可能な最大シーケンス長
             dropout (float): ドロップアウト率
         """
-        super(LearnedPositionalEncoding, self).__init__()
+        super().__init__()
 
         self.dropout = nn.Dropout(p=dropout)
 
