@@ -35,6 +35,7 @@ learn_transformer/
 │   ├── 09_addition_improvement.ipynb     # Additionタスク改善実験
 │   ├── 10_pytorch_vs_custom.ipynb        # PyTorch版 vs 自作版 性能比較
 │   ├── tutorial_transformer.ipynb        # Transformerチュートリアル（番外）
+│   ├── pytorch_basics.ipynb              # PyTorch入門（番外）
 │   ├── QandA_01_attention.ipynb          # Q&A: Attention基礎 (Q1-Q4)
 │   ├── QandA_02_multihead.ipynb          # Q&A: Multi-Head Attention (Q5-Q16)
 │   ├── QandA_03_architecture.ipynb       # Q&A: アーキテクチャ (Q17-Q31)

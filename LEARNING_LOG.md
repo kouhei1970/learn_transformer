@@ -20,6 +20,31 @@
 
 ---
 
+## 2025年12月22日（続き6）
+
+### 完了した内容
+
+#### PyTorch入門ドキュメントの作成
+- ✅ pytorch_basics.ipynb 完了（番外）
+  - 自作Transformerのソースコードを理解するための基礎
+  - 深層学習入門としても使用可能
+
+#### 内容
+1. **テンソルの基礎** - 作成、演算、形状変換
+2. **自動微分** - requires_grad、backward
+3. **nn.Module** - モデルの作り方、super().__init__()
+4. **よく使う層** - Linear, Embedding, LayerNorm, Dropout
+5. **活性化関数** - ReLU, GELU, Softmax の選び方
+6. **損失関数** - CrossEntropyLoss, ignore_index
+7. **最適化** - Adam, AdamW, 学習率
+8. **学習ループ** - zero_grad → forward → backward → step
+9. **推論モード** - eval(), torch.no_grad()
+10. **モデルの確認** - パラメータ数、形状確認、保存/読込
+11. **GPU使用** - device, to(), cpu()
+12. **Transformerコードとの対応** - 実際のコードとの紐付け
+
+---
+
 ## 2025年12月22日（続き5）
 
 ### 完了した内容
