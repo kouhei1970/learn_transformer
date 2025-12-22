@@ -1,5 +1,35 @@
 # Transformer学習ログ
 
+## 2025年12月22日（続き）
+
+### 完了した内容
+
+#### Decoder実装
+- ✅ Decoder（デコーダー）の実装 (`src/decoder.py`)
+  - `generate_causal_mask`: 未来を見ないマスク生成
+  - `DecoderLayer`: Masked Self-Attention + Cross-Attention + FFN
+  - `Decoder`: N層のDecoderLayer
+  - `TransformerDecoder`: 埋め込み層と出力層を含む完全版
+- ✅ 06_decoder_demo.ipynb 完了
+
+#### 学習ポイント
+- **Causal Mask**: 下三角行列で未来のトークンをマスク
+- **Masked Self-Attention**: 自分より前の位置のみ参照可能
+- **Cross-Attention**: Q=Decoder状態, K,V=Encoder出力
+- **Encoder vs Decoder**: DecoderはCross-Attention分パラメータが多い
+
+#### 新規Q&A追加（QandA_03_architecture.ipynb）
+- **Q29**: 翻訳タスクでのEncoder/Decoder入出力
+- **Q30**: Teacher Forcingとは何か
+- **Q31**: シーケンス長の違いはCross-Attentionで吸収
+  - `[tgt_len, src_len] @ [src_len, d_model] = [tgt_len, d_model]`
+
+### 次のステップ
+- [ ] 完全なTransformerモデル（Encoder + Decoder統合）
+- [ ] 実際のタスク（翻訳など）
+
+---
+
 ## 2025年12月22日
 
 ### 完了した内容
