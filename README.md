@@ -21,7 +21,8 @@ learn_transformer/
 │   ├── position_encoding.py # Position Encoding実装
 │   ├── feed_forward.py     # Feed Forward Network実装
 │   ├── encoder.py          # Encoder実装
-│   └── decoder.py          # Decoder実装
+│   ├── decoder.py          # Decoder実装
+│   └── transformer.py      # 完全なTransformer実装
 ├── notebooks/              # Jupyter Notebook
 │   ├── 01_self_attention_demo.ipynb      # Self-Attentionのデモ
 │   ├── 02_multi_head_attention_demo.ipynb # Multi-Head Attentionのデモ
@@ -29,6 +30,7 @@ learn_transformer/
 │   ├── 04_feed_forward_demo.ipynb        # Feed Forward Networkのデモ
 │   ├── 05_encoder_demo.ipynb             # Encoderのデモ
 │   ├── 06_decoder_demo.ipynb             # Decoderのデモ
+│   ├── 07_transformer_demo.ipynb         # 完全なTransformerのデモ
 │   ├── QandA_01_attention.ipynb          # Q&A: Attention基礎 (Q1-Q4)
 │   ├── QandA_02_multihead.ipynb          # Q&A: Multi-Head Attention (Q5-Q16)
 │   ├── QandA_03_architecture.ipynb       # Q&A: アーキテクチャ (Q17-Q31)
@@ -60,7 +62,11 @@ pip install -r requirements.txt
   - Causal Mask（未来を見ないマスク）
   - Cross-Attention（Encoder出力への注意）
   - DecoderLayer / Decoder / TransformerDecoder
-- [ ] 完全なTransformerモデル（Encoder + Decoder統合）
+- [x] 完全なTransformerモデル (`src/transformer.py`)
+  - Encoder + Decoder統合
+  - 自動マスク生成
+  - Greedy / サンプリング生成
+  - Top-K / Top-P サンプリング
 
 ## 使い方
 

@@ -10,13 +10,39 @@
 | Feed Forward Network | ✅ 完了 | `src/feed_forward.py` |
 | Encoder | ✅ 完了 | `src/encoder.py` |
 | Decoder | ✅ 完了 | `src/decoder.py` |
-| 完全なTransformer | 🔲 未着手 | - |
+| 完全なTransformer | ✅ 完了 | `src/transformer.py` |
 
 ### Q&A記録
 - `QandA_01_attention.ipynb`: Q1-Q4（Attention基礎）
 - `QandA_02_multihead.ipynb`: Q5-Q16（Multi-Head Attention）
 - `QandA_03_architecture.ipynb`: Q17-Q31（アーキテクチャ）
 - `QandA_04_experiments.ipynb`: 実験・応用
+
+---
+
+## 2025年12月22日（続き2）
+
+### 完了した内容
+
+#### 完全なTransformer実装
+- ✅ Transformer（Encoder + Decoder統合）の実装 (`src/transformer.py`)
+  - `Transformer`: Encoder-Decoder構造の完全なモデル
+  - `make_src_mask`, `make_tgt_mask`: 自動マスク生成
+  - `encode`, `decode`: 分離されたエンコード/デコード
+  - `generate`: サンプリング生成（Temperature, Top-K, Top-P対応）
+  - `greedy_decode`: 貪欲法による生成
+- ✅ 07_transformer_demo.ipynb 完了
+  - モデル構造の解説
+  - 順伝播のデモ
+  - シーケンス生成の比較（Greedy vs サンプリング）
+  - パラメータ分析
+  - コピータスクでの学習デモ
+
+#### 学習ポイント
+- **Transformer構造**: Encoder(N層) + Decoder(N層) + 出力層
+- **パラメータ配分**: Embedding(10%), Encoder(37%), Decoder(49%), Output(5%)
+- **生成方法**: Greedy, サンプリング, Top-K, Top-P (Nucleus)
+- **Temperature**: <1で確定的、>1でランダム
 
 ---
 
@@ -44,9 +70,13 @@
 - **Q31**: シーケンス長の違いはCross-Attentionで吸収
   - `[tgt_len, src_len] @ [src_len, d_model] = [tgt_len, d_model]`
 
-### 次のステップ
-- [ ] 完全なTransformerモデル（Encoder + Decoder統合）
-- [ ] 実際のタスク（翻訳など）
+### 完了（このセクションで）
+- ✅ 完全なTransformerモデル（Encoder + Decoder統合）
+
+### 次のステップ（候補）
+- [ ] 実際の翻訳タスク
+- [ ] Beam Search の実装
+- [ ] 事前学習モデルの理解（BERT, GPT）
 
 ---
 
