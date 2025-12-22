@@ -1,5 +1,44 @@
 # Transformer学習ログ
 
+## 2025年12月22日
+
+### 完了した内容
+
+#### QandA分割
+巨大化したQandA.ipynbを4つのファイルに分割：
+- `QandA_01_attention.ipynb`: Attention基礎 (Q1-Q4)
+- `QandA_02_multihead.ipynb`: Multi-Head Attention (Q5-Q14)
+- `QandA_03_architecture.ipynb`: アーキテクチャ (Q15-Q28)
+- `QandA_04_experiments.ipynb`: 実験・応用
+
+#### コーディングスタイル修正
+- ✅ `super(ClassName, self)` → `super()` に統一（Python 3スタイル）
+- 全ファイル（attention.py, encoder.py, feed_forward.py, position_encoding.py）を修正
+- Jupyterのモジュールキャッシュ問題を回避
+
+#### 新規Q&A追加（QandA_03_architecture.ipynb）
+- **Q21**: Add & Normの「Add」とは何か（残差接続）
+- **Q22**: なぜ「残差」と呼ぶのか、英語では？（Residual Connection）
+- **Q23**: ResNetとは何か
+- **Q24**: Encoder出力の意味とDecoderでの使われ方（Cross-Attention）
+- **Q25**: Encoderは複数のEncoder Layerが直列接続されているのか
+- **Q26**: 「文脈を考慮した表現」とは具体的に何か
+- **Q27**: 同じ単語が複数回出現する場合の区別方法
+- **Q28**: 複数の特徴量ベクトルが1つの単語に結びつくのか
+
+#### 学習ポイント
+- **残差接続**: ResNet由来、`F(x) = H(x) - x`という差分を学習
+- **文脈表現**: 同じ単語でも周囲の単語によって異なるベクトルになる
+- **Encoder→Decoder**: Cross-AttentionでK, Vとして使用、勾配も逆伝播
+- **出力変換**: 多対一の写像（異なるベクトル→同じ単語）
+
+### 次のステップ
+- [ ] Decoder
+- [ ] Cross-Attention
+- [ ] 完全なTransformerモデル
+
+---
+
 ## 2025年12月21日（続き）
 
 ### 完了した内容
@@ -12,21 +51,12 @@
   - Encoder: N層のEncoderLayer
   - TransformerEncoder: 埋め込み層を含む完全版
 - ✅ 05_encoder_demo.ipynb 完了
-- ✅ Jupyterモジュールキャッシュ問題を修正（sys.modulesからの削除方式）
 
 #### 学習ポイント
 - **Layer Normalization**: 特徴次元に沿って正規化、バッチサイズに依存しない
 - **Residual Connection**: 入力をそのまま出力に加算、勾配のショートカット
 - **Encoder構造**: [Self-Attention → Add & Norm → FFN → Add & Norm] × N層
 - **パラメータ数**: 語彙サイズが大きいとEmbedding層が支配的
-
-#### トラブルシューティング
-- **Jupyterキャッシュ問題**: `importlib.reload`ではなく`sys.modules`から`src`モジュールを削除する方式で解決
-
-### 次のステップ
-- [ ] Decoder
-- [ ] Cross-Attention
-- [ ] 完全なTransformerモデル
 
 ---
 
