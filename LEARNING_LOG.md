@@ -38,11 +38,20 @@
   - パラメータ分析
   - コピータスクでの学習デモ
 
+#### 多様なタスクのデモ
+- ✅ 08_diverse_tasks_demo.ipynb 完了
+  - **コピータスク**: 入力をそのまま出力
+  - **反転タスク**: 入力を逆順に出力
+  - **ソートタスク**: 数字を昇順にソート
+  - **加算タスク**: 2つの数字を足し算
+  - **簡易翻訳タスク**: トークン変換ルール
+
 #### 学習ポイント
 - **Transformer構造**: Encoder(N層) + Decoder(N層) + 出力層
 - **パラメータ配分**: Embedding(10%), Encoder(37%), Decoder(49%), Output(5%)
 - **生成方法**: Greedy, サンプリング, Top-K, Top-P (Nucleus)
 - **Temperature**: <1で確定的、>1でランダム
+- **タスク難易度**: Copy/Translation < Reverse < Sort/Addition
 
 ---
 

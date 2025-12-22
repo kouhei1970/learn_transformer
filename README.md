@@ -31,6 +31,7 @@ learn_transformer/
 │   ├── 05_encoder_demo.ipynb             # Encoderのデモ
 │   ├── 06_decoder_demo.ipynb             # Decoderのデモ
 │   ├── 07_transformer_demo.ipynb         # 完全なTransformerのデモ
+│   ├── 08_diverse_tasks_demo.ipynb       # 様々なタスクでの学習デモ
 │   ├── QandA_01_attention.ipynb          # Q&A: Attention基礎 (Q1-Q4)
 │   ├── QandA_02_multihead.ipynb          # Q&A: Multi-Head Attention (Q5-Q16)
 │   ├── QandA_03_architecture.ipynb       # Q&A: アーキテクチャ (Q17-Q31)
