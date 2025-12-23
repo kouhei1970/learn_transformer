@@ -19,3 +19,8 @@ tqdm>=4.65.0
 
 # Testing
 pytest>=7.3.0
+
+# Chat Tool
+sentencepiece>=0.1.99
+datasets>=2.14.0
+gradio>=4.0.0

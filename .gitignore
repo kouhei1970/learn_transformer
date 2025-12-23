@@ -39,3 +39,10 @@ build/
 
 # Archive files
 *_archive_*.ipynb
+
+# 学習結果・モデル
+models/
+models_bak/
+*.pt
+*.model
+*.vocab
